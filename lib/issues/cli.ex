@@ -36,15 +36,27 @@ defmodule Issues.CLI do
     System.halt(0)
   end
 
-  def process({user, project, _count}) do
+  def process({user, project, count}) do
     Issues.GithubIssues.fetch(user, project)
     |> decode_response()
     |> sort_into_descending_order()
+    |> last_oldest(count)
   end
 
-  defp decode_response({:ok, body}), do: body
+  def do_parse_args([user, project, count]) do
+    {user, project, String.to_integer(count)}
+  end
 
-  defp decode_response({:error, error}) do
+  def do_parse_args([user, project]) do
+    {user, project, @default_count}
+  end
+
+  # bad arg or --help
+  def do_parse_args(_other), do: :help
+
+  def decode_response({:ok, body}), do: body
+
+  def decode_response({:error, error}) do
     IO.puts("Error fetching from GitHub: #{error["message"]}")
     System.halt(2)
   end
@@ -56,14 +68,9 @@ defmodule Issues.CLI do
     end)
   end
 
-  defp do_parse_args([user, project, count]) do
-    {user, project, String.to_integer(count)}
+  def last_oldest(list, count) do
+    list
+    |> Enum.take(count)
+    |> Enum.reverse()
   end
-
-  defp do_parse_args([user, project]) do
-    {user, project, @default_count}
-  end
-
-  # bad arg or --help
-  defp do_parse_args(_other), do: :help
 end
