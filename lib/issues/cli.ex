@@ -41,6 +41,7 @@ defmodule Issues.CLI do
     |> decode_response()
     |> sort_into_descending_order()
     |> last_oldest(count)
+    |> print_table_for_columns(["number", "created_at", "title"])
   end
 
   def do_parse_args([user, project, count]) do
@@ -64,7 +65,7 @@ defmodule Issues.CLI do
   def sort_into_descending_order(issues_list) do
     issues_list
     |> Enum.sort(fn i1, i2 ->
-      i1["created_at"] >= i2["created_at"]
+      i1["created_at"] <= i2["created_at"]
     end)
   end
 
@@ -72,5 +73,11 @@ defmodule Issues.CLI do
     list
     |> Enum.take(count)
     |> Enum.reverse()
+  end
+
+  def print_table_for_columns(issues_list, columns) do
+    issues_list
+    |> Issues.Table.format(columns)
+    |> IO.puts()
   end
 end
