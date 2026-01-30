@@ -8,7 +8,7 @@ Console utility to list `n` oldest issues from a GitHub repo. Taken from the `Pr
 issues [ user repo ] | [ user repo n ]
 ```
 
-Let's list 4 last oldest issues from `Elixir` repo:
+Let's list 4 last oldest issues from the `Elixir` repo:
 
 ```bash
 issues elixir-lang elixir 4
@@ -34,6 +34,7 @@ Clone it and build it:
 ```bash
 git clone https://github.com/samedit66/issues.git
 cd issues
+mix deps.get
 mix escript.build
 ./issues -h
 ```
