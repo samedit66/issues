@@ -4,6 +4,8 @@ defmodule Issues.MixProject do
   def project do
     [
       app: :issues,
+      name: "issues",
+      source_url: "https://github.com/samedit66/issues.git",
       escript: escript_config(),
       version: "0.1.0",
       elixir: "~> 1.19",
@@ -23,7 +25,8 @@ defmodule Issues.MixProject do
   defp deps do
     [
       {:httpoison, "~> 2.0"},
-      {:poison, "~> 6.0"}
+      {:poison, "~> 6.0"},
+      {:ex_doc, "~> 0.34", only: :dev, runtime: false, warn_if_outdated: true}
     ]
   end
 
